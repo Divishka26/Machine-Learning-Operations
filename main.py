@@ -1,0 +1,50 @@
+import pandas as pd
+df = pd.read_csv("House Price Prediction Dataset.csv")
+print("Dataset loaded successfully!")
+print(df.head())
+df.isna()
+df.drop("Id", axis=1, inplace = True)
+df.info()
+print(df['Location'].value_counts())
+from sklearn.preprocessing import LabelEncoder
+le= LabelEncoder()
+le.fit(df['Location'])
+print(le.classes_)
+df['Location']=le.transform(df['Location'])
+print(df['Location'])
+print(df['Condition'].value_counts())
+le3= LabelEncoder()
+le3.fit(df['Condition'])
+print(le3.classes_)
+df['Condition']=le3.transform(df['Condition'])
+print(df['Condition'])
+print(df['Garage'].value_counts())
+le2= LabelEncoder()
+le2.fit(df['Garage'])
+print(le2.classes_)
+df['Garage']=le2.transform(df['Garage'])
+print(df['Garage'])
+x = df.drop('Price', axis= 1)
+y= df['Price']
+x.shape
+y.shape
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test =train_test_split(x, y, test_size= 0.2, random_state= 42)
+print(x_train.shape)
+print(x_test.shape)
+print(y_train.shape)
+print(y_test.shape)
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+from sklearn.linear_model import LinearRegression
+model = LinearRegression()
+model.fit(x_train, y_train)
+y_pred = model.predict(x_test)
+from sklearn.metrics import r2_score, mean_absolute_error
+rscore = r2_score(y_test, y_pred)
+print("r2score=" + str(rscore))
+mea = mean_absolute_error(y_test, y_pred)
+print("Mean Absolute Error =" + str(mea))
